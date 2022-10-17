@@ -1,29 +1,26 @@
 #!/usr/bin/python3
-"""Starts a Flask web application"""
-
-from flask import Flask
+"""This script starts a Flask web application"""
+from flask import Flask, escape
 app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def hello_holberton():
-    """Returns a string at the root route"""
-    return 'Hello HBNB!'
+def route():
+    """Return two words"""
+    return "Hello HBNB!"
 
 
 @app.route('/hbnb', strict_slashes=False)
-def hbnb():
-    """Returns a string at the /hbnb route"""
-    return 'HBNB'
+def route_hbnb():
+    """Return a word"""
+    return "HBNB"
 
 
-@app.route('/c/<text>', strict_slashes=False)
-def cisfun(text):
-    """Returns a string at the /c/<text> route,
-    expands the <text> variable"""
-    new = text.replace('_', ' ')
-    return 'C %s' % new
+@app.route('/c/<path:subpath>', strict_slashes=False)
+def route_c(subpath):
+    """Return subpath"""
+    return "C {}".format(escape(subpath).replace('_', ' '))
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host="0.0.0.0", port=5000)

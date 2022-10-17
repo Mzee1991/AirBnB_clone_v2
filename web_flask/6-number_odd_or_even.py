@@ -1,63 +1,52 @@
 #!/usr/bin/python3
-"""Starts a Flask web application"""
-
-from flask import Flask
-from flask import render_template
+"""This script starts a Flask web application"""
+from flask import Flask, escape, render_template
 app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def hello_holberton():
-    """Returns a string at the root route"""
-    return 'Hello HBNB!'
+def route():
+    """Return two words"""
+    return "Hello HBNB!"
 
 
 @app.route('/hbnb', strict_slashes=False)
-def hbnb():
-    """Returns a string at the /hbnb route"""
-    return 'HBNB'
+def route_hbnb():
+    """Return a word"""
+    return "HBNB"
 
 
-@app.route('/c/<text>', strict_slashes=False)
-def cisfun(text):
-    """Returns a string at the /c/<text> route,
-    expands the <text> variable"""
-    new = text.replace('_', ' ')
-    return 'C %s' % new
+@app.route('/c/<path:subpath>', strict_slashes=False)
+def route_c(subpath):
+    """Return subpath"""
+    return "C {}".format(escape(subpath).replace('_', ' '))
 
 
-@app.route('/python', defaults={'text': 'is cool'}, strict_slashes=False)
-@app.route('/python/<text>', strict_slashes=False)
-def pythoniscool(text):
-    """Returns a string at the /python route, with a default text
-    of 'is cool', or the expansion of <text>"""
-    new = text.replace('_', ' ')
-    return 'Python %s' % new
+@app.route('/python', defaults={'subpath': 'is cool'}, strict_slashes=False)
+@app.route('/python/<path:subpath>', strict_slashes=False)
+def route_python(subpath):
+    """Return subpath"""
+    return "Python {}".format(escape(subpath).replace('_', ' '))
 
 
-@app.route('/number/<int:n>', strict_slashes=False)
-def number(n):
-    """Returns a string at the /number/<n> route,
-    only if n is an int"""
-    if type(n) == int:
-        return '%i is a number' % n
+@app.route('/number/<int:num>', strict_slashes=False)
+def route_number(num):
+    """Return only if num is a int"""
+    return "{} is a number".format(escape(num))
 
 
-@app.route('/number_template/<int:n>', strict_slashes=False)
-def number_template(n):
-    """Returns a template at the /number_template/<n> route,
-    expanding route"""
-    if type(n) == int:
-        return render_template('5-number.html', n=n)
+@app.route('/number_template/<int:num>', strict_slashes=False)
+def route_template(num):
+    """Return a file HTML only if num is a int"""
+    return render_template("5-number.html", n=num)
 
 
-@app.route('/number_odd_or_even/<int:n>', strict_slashes=False)
-def number_odd_or_even(n):
-    """Returns a template at the /number_odd_or_even/<n>
-    route, display if the number is odd or even"""
-    if type(n) == int:
-        return render_template('6-number_odd_or_even.html', n=n)
+@app.route('/number_odd_or_even/<int:num>', strict_slashes=False)
+def route_odd_even(num):
+    """Returns an HTML file only if num is an int and describes
+    if num is odd or even"""
+    return render_template("6-number_odd_or_even.html", n=num)
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host="0.0.0.0", port=5000)
